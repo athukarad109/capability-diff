@@ -1,0 +1,140 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.0.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "compared": {
+    "left": "@types/node@20.17.0",
+    "right": "@types/node@20.16.0"
+  },
+  "packages": {
+    "left": {
+      "name": "@types/node",
+      "version": "20.17.0",
+      "publishTime": "2024-10-23T14:02:38.326Z",
+      "maintainers": [
+        {
+          "name": "types",
+          "email": "ts-npm-types@microsoft.com"
+        }
+      ]
+    },
+    "right": {
+      "name": "@types/node",
+      "version": "20.16.0",
+      "publishTime": "2024-08-18T09:08:00.095Z",
+      "maintainers": [
+        {
+          "name": "types",
+          "email": "ts-npm-types@microsoft.com"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 1,
+    "added": 0,
+    "unchanged": 75
+  },
+  "removed": {
+    "external": [],
+    "builtin": [
+      "inspector/promises"
+    ],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [],
+    "builtin": [
+      "async_hooks",
+      "buffer",
+      "child_process",
+      "cluster",
+      "crypto",
+      "dgram",
+      "diagnostics_channel",
+      "dns",
+      "dns/promises",
+      "domain",
+      "events",
+      "fs",
+      "fs/promises",
+      "http",
+      "http2",
+      "https",
+      "inspector",
+      "net",
+      "node:assert",
+      "node:async_hooks",
+      "node:buffer",
+      "node:child_process",
+      "node:crypto",
+      "node:dgram",
+      "node:dns",
+      "node:dns/promises",
+      "node:events",
+      "node:fs",
+      "node:fs/promises",
+      "node:http",
+      "node:module",
+      "node:net",
+      "node:os",
+      "node:perf_hooks",
+      "node:querystring",
+      "node:readline",
+      "node:readline/promises",
+      "node:stream",
+      "node:stream/consumers",
+      "node:stream/promises",
+      "node:stream/web",
+      "node:timers",
+      "node:timers/promises",
+      "node:tls",
+      "node:tty",
+      "node:url",
+      "node:util",
+      "node:util/types",
+      "node:vm",
+      "node:worker_threads",
+      "os",
+      "perf_hooks",
+      "punycode",
+      "querystring",
+      "readline",
+      "readline/promises",
+      "repl",
+      "stream",
+      "stream/consumers",
+      "stream/promises",
+      "stream/web",
+      "string_decoder",
+      "timers",
+      "timers/promises",
+      "tls",
+      "trace_events",
+      "tty",
+      "url",
+      "util",
+      "util/types",
+      "v8",
+      "vm",
+      "wasi",
+      "worker_threads",
+      "zlib"
+    ],
+    "internal": []
+  },
+  "scannedFiles": {
+    "left": 63,
+    "right": 55
+  },
+  "parseFailures": []
+}

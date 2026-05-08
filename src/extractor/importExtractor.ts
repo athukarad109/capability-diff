@@ -1,10 +1,14 @@
 import { readFile } from "node:fs/promises";
+import type { PackageRef } from "../resolver/types";
 import type { ImportFingerprint } from "./types";
 import { listSourceFiles } from "./fileWalker";
+import { normalizeImportSpecifier } from "./normalizeImportSpecifier";
 import { parseSourceFile } from "./parser";
 
 function addSpecifier(spec: unknown, into: Set<string>): void {
-  if (typeof spec === "string" && spec.length > 0) into.add(spec);
+  if (typeof spec !== "string") return;
+  const normalized = normalizeImportSpecifier(spec);
+  if (normalized.length > 0) into.add(normalized);
 }
 
 /** SWC-ish JSON AST: recursive traversal + duck typing by `type`. */
@@ -84,9 +88,10 @@ function collectImportsFromEstree(node: unknown, into: Set<string>): void {
 }
 
 export async function extractImportsFingerprint(
-  label: string,
+  packageRef: PackageRef,
   extractedPackageDir: string
 ): Promise<ImportFingerprint> {
+  const label = `${packageRef.name}@${packageRef.version}`;
   const imports = new Set<string>();
   const parseFailures: ImportFingerprint["parseFailures"] = [];
 
@@ -108,5 +113,5 @@ export async function extractImportsFingerprint(
     else collectImportsFromEstree(parsed.ast, imports);
   }
 
-  return { label, imports, scannedFiles, parseFailures };
+  return { packageRef, label, imports, scannedFiles, parseFailures };
 }
