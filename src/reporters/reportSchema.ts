@@ -5,4 +5,4 @@
 export const IMPORT_DIFF_REPORT_SCHEMA_ID =
   "supply-chain-gap.import-diff-report" as const;
 
-export const IMPORT_DIFF_REPORT_SCHEMA_VERSION = "1.0.0" as const;
+export const IMPORT_DIFF_REPORT_SCHEMA_VERSION = "1.7.0" as const;

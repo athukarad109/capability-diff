@@ -10,6 +10,10 @@ export type ImportFingerprint = {
     /** Human-readable `"name@version"` for reports. */
     label: string;
     imports: Set<string>;
+    /** Static `process.env.*` / `import.meta.env.*` member access (best-effort). */
+    envAccesses: Set<string>;
+    /** String / template static chunks matching `http(s)://...`. */
+    urlLiterals: Set<string>;
     scannedFiles: number;
     parseFailures: ParseFailure[];
 }

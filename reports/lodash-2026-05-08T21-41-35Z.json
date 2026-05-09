@@ -1,0 +1,143 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.6.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "analysis": {
+    "mode": "fast"
+  },
+  "compared": {
+    "left": "lodash@4.17.20",
+    "right": "lodash@4.17.21"
+  },
+  "packages": {
+    "left": {
+      "name": "lodash",
+      "version": "4.17.20",
+      "publishTime": "2020-08-13T16:53:54.152Z",
+      "maintainers": [
+        {
+          "name": "bnjmnt4n",
+          "email": "demoneaux@gmail.com"
+        },
+        {
+          "name": "jdalton",
+          "email": "john.david.dalton@gmail.com"
+        },
+        {
+          "name": "mathias",
+          "email": "mathias@qiwi.be"
+        }
+      ]
+    },
+    "right": {
+      "name": "lodash",
+      "version": "4.17.21",
+      "publishTime": "2021-02-20T15:42:16.891Z",
+      "maintainers": [
+        {
+          "name": "mathias",
+          "email": "mathias@qiwi.be"
+        },
+        {
+          "name": "jdalton",
+          "email": "john.david.dalton@gmail.com"
+        },
+        {
+          "name": "bnjmnt4n",
+          "email": "benjamin@dev.ofcr.se"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 0,
+    "added": 0,
+    "unchanged": 0
+  },
+  "removed": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "test=echo \"See https://travis-ci.org/lodash-archive/lodash-cli for testing details.\""
+      ]
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    },
+    "urlLiterals": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    }
+  },
+  "maintainersDiff": {
+    "added": [
+      {
+        "name": "bnjmnt4n",
+        "email": "benjamin@dev.ofcr.se"
+      }
+    ],
+    "removed": [
+      {
+        "name": "bnjmnt4n",
+        "email": "demoneaux@gmail.com"
+      }
+    ]
+  },
+  "additionsOnlyRisk": {
+    "level": "high",
+    "score": 16,
+    "rawCapabilityScore": 0,
+    "maintainerScore": 12,
+    "semverMultiplier": 1.35,
+    "semver": {
+      "baselineVersion": "4.17.20",
+      "compareVersion": "4.17.21",
+      "kind": "patch",
+      "multiplier": 1.35
+    },
+    "reasons": [
+      "Semver patch bump (4.17.20 → 4.17.21), risk multiplier ×1.35",
+      "1 registry maintainer account(s) added vs baseline"
+    ],
+    "addedSignals": {
+      "externalImports": 0,
+      "installScripts": 0,
+      "envAccesses": 0,
+      "urlLiterals": 0
+    }
+  },
+  "verdict": {
+    "label": "SUSPICIOUS",
+    "summary": "1 registry maintainer account(s) added vs baseline",
+    "heuristicLevel": "high"
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 1046,
+    "right": 1048
+  },
+  "parseFailures": []
+}

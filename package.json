@@ -6,19 +6,22 @@
   "scripts": {
     "dev": "tsx src/cli.ts",
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:validation": "vitest run src/validationMatrix.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@swc/core": "^1.15.32",
+    "semver": "^7.8.0",
     "tar": "^7.5.13",
     "undici": "^8.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "@types/semver": "^7.7.1",
     "@typescript-eslint/typescript-estree": "^8.59.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",

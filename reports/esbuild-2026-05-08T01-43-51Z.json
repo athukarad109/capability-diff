@@ -1,0 +1,94 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.1.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "compared": {
+    "left": "esbuild@0.21.1",
+    "right": "esbuild@0.21.0"
+  },
+  "packages": {
+    "left": {
+      "name": "esbuild",
+      "version": "0.21.1",
+      "publishTime": "2024-05-07T16:56:26.115Z",
+      "maintainers": [
+        {
+          "name": "evanw",
+          "email": "evan.exe@gmail.com"
+        },
+        {
+          "name": "esbuild",
+          "email": "evan.exe+esbuild@gmail.com"
+        }
+      ]
+    },
+    "right": {
+      "name": "esbuild",
+      "version": "0.21.0",
+      "publishTime": "2024-05-07T02:53:09.308Z",
+      "maintainers": [
+        {
+          "name": "evanw",
+          "email": "evan.exe@gmail.com"
+        },
+        {
+          "name": "esbuild",
+          "email": "evan.exe+esbuild@gmail.com"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 0,
+    "added": 0,
+    "unchanged": 0
+  },
+  "removed": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "postinstall=node install.js"
+      ]
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "process.env.ESBUILD_BINARY_PATH",
+        "process.env.ESBUILD_MAX_BUFFER",
+        "process.env.ESBUILD_WORKER_THREADS"
+      ]
+    },
+    "urlLiterals": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    }
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 3,
+    "right": 3
+  },
+  "parseFailures": []
+}

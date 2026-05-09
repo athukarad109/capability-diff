@@ -3,6 +3,7 @@ import type { PackageRef } from "../resolver/types";
 import type { ImportFingerprint } from "./types";
 import { listSourceFiles } from "./fileWalker";
 import { normalizeImportSpecifier } from "./normalizeImportSpecifier";
+import { collectCapabilitiesFromParsedAst } from "./capabilityAst";
 import { parseSourceFile } from "./parser";
 
 function addSpecifier(spec: unknown, into: Set<string>): void {
@@ -32,7 +33,12 @@ function collectImportsFromUnknownSwcStyle(node: unknown, into: Set<string>): vo
   // require("x") best-effort
   if (t === "CallExpression") {
     const callee = n.callee as Record<string, unknown> | undefined;
-    if (callee?.type === "Identifier" && callee.value === "require") {
+    let requireId: string | undefined;
+    if (callee?.type === "Identifier") {
+      if (typeof callee.value === "string") requireId = callee.value;
+      else if (typeof callee.name === "string") requireId = callee.name;
+    }
+    if (requireId === "require") {
       const args = n.arguments as unknown[] | undefined;
       const arg0 = args?.[0] as Record<string, unknown> | undefined;
       if (arg0?.type === "StringLiteral") addSpecifier(arg0.value, into);
@@ -93,6 +99,8 @@ export async function extractImportsFingerprint(
 ): Promise<ImportFingerprint> {
   const label = `${packageRef.name}@${packageRef.version}`;
   const imports = new Set<string>();
+  const envAccesses = new Set<string>();
+  const urlLiterals = new Set<string>();
   const parseFailures: ImportFingerprint["parseFailures"] = [];
 
   const files = await listSourceFiles(extractedPackageDir);
@@ -111,7 +119,22 @@ export async function extractImportsFingerprint(
 
     if (parsed.astKind === "swc") collectImportsFromUnknownSwcStyle(parsed.ast, imports);
     else collectImportsFromEstree(parsed.ast, imports);
+
+    collectCapabilitiesFromParsedAst(
+      parsed.ast,
+      parsed.astKind,
+      envAccesses,
+      urlLiterals
+    );
   }
 
-  return { packageRef, label, imports, scannedFiles, parseFailures };
+  return {
+    packageRef,
+    label,
+    imports,
+    envAccesses,
+    urlLiterals,
+    scannedFiles,
+    parseFailures,
+  };
 }

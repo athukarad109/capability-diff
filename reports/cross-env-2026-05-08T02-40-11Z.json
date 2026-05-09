@@ -1,0 +1,90 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.1.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "compared": {
+    "left": "cross-env@7.0.3",
+    "right": "cross-env@6.0.3"
+  },
+  "packages": {
+    "left": {
+      "name": "cross-env",
+      "version": "7.0.3",
+      "publishTime": "2020-12-01T20:25:26.541Z",
+      "maintainers": [
+        {
+          "name": "kentcdodds",
+          "email": "me@kentcdodds.com"
+        }
+      ]
+    },
+    "right": {
+      "name": "cross-env",
+      "version": "6.0.3",
+      "publishTime": "2019-10-02T16:19:54.704Z",
+      "maintainers": [
+        {
+          "name": "kentcdodds",
+          "email": "kent@doddsfamily.us"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 0,
+    "added": 0,
+    "unchanged": 0
+  },
+  "removed": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [
+        "setup=npm install && npm run validate -s",
+        "test:update=npm test -- --updateSnapshot --coverage"
+      ],
+      "added": [],
+      "unchanged": [
+        "lint=kcd-scripts lint",
+        "test=kcd-scripts test",
+        "validate=kcd-scripts validate"
+      ]
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "process.env.APPDATA",
+        "process.env.OSTYPE"
+      ]
+    },
+    "urlLiterals": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    }
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 6,
+    "right": 6
+  },
+  "parseFailures": []
+}

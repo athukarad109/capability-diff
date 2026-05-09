@@ -1,0 +1,168 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.1.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "compared": {
+    "left": "npm@10.9.0",
+    "right": "npm@10.8.2"
+  },
+  "packages": {
+    "left": {
+      "name": "npm",
+      "version": "10.9.0",
+      "publishTime": "2024-10-03T17:54:05.673Z",
+      "maintainers": [
+        {
+          "name": "hashtagchris",
+          "email": "hashtagchris@github.com"
+        },
+        {
+          "name": "reggi",
+          "email": "reggi@github.com"
+        },
+        {
+          "name": "npm-cli-ops",
+          "email": "npm-cli+bot@github.com"
+        },
+        {
+          "name": "saquibkhan",
+          "email": "saquibkhan@github.com"
+        },
+        {
+          "name": "fritzy",
+          "email": "fritzy@github.com"
+        },
+        {
+          "name": "gar",
+          "email": "gar+npm@danger.computer"
+        }
+      ]
+    },
+    "right": {
+      "name": "npm",
+      "version": "10.8.2",
+      "publishTime": "2024-07-10T17:06:04.881Z",
+      "maintainers": [
+        {
+          "name": "reggi",
+          "email": "reggi@github.com"
+        },
+        {
+          "name": "npm-cli-ops",
+          "email": "npm-cli+bot@github.com"
+        },
+        {
+          "name": "saquibkhan",
+          "email": "saquibkhan@github.com"
+        },
+        {
+          "name": "fritzy",
+          "email": "fritzy@github.com"
+        },
+        {
+          "name": "gar",
+          "email": "gar+npm@danger.computer"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 0,
+    "added": 0,
+    "unchanged": 11
+  },
+  "removed": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [
+      "@isaacs/string-locale-compare",
+      "@npmcli/config/lib/definitions",
+      "@npmcli/package-json",
+      "@npmcli/redact",
+      "ini",
+      "proc-log"
+    ],
+    "builtin": [
+      "node:child_process",
+      "node:fs/promises",
+      "node:os",
+      "node:path"
+    ],
+    "internal": [
+      "../base-cmd.js"
+    ]
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [
+        "eslint=eslint \"**/*.{js,cjs,ts,mjs,jsx,tsx}\"",
+        "lint=node . run eslint",
+        "lintfix=node . run eslint -- --fix"
+      ],
+      "added": [
+        "lint=eslint \"**/*.{js,cjs,ts,mjs,jsx,tsx}\"",
+        "lintfix=node . run lint -- --fix"
+      ],
+      "unchanged": [
+        "dependencies=node scripts/bundle-and-gitignore-deps.js && node scripts/dependency-graph.js",
+        "dumpconf=env | grep npm | sort | uniq",
+        "licenses=npx licensee --production --errors-only",
+        "lint-all=node . run lint -ws -iwr --if-present",
+        "postlint=template-oss-check",
+        "posttest=node . run lint",
+        "prepack=node . run build -w docs",
+        "resetdeps=node scripts/resetdeps.js",
+        "rp-pull-request=node scripts/update-authors.js",
+        "snap=tap",
+        "template-oss-apply=template-oss-apply --force",
+        "test-all=node . run test -ws -iwr --if-present",
+        "test:nocolor=CI=true tap -Rclassic",
+        "test=tap"
+      ]
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "process.env.COLOR",
+        "process.env.HOME",
+        "process.env.HOME.length",
+        "process.env.MSYSTEM",
+        "process.env.npm_command",
+        "process.env.PATH",
+        "process.env.PATH.includes",
+        "process.env.TERM"
+      ]
+    },
+    "urlLiterals": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "http://cyclonedx.org/schema/bom-1.5.schema.json",
+        "https://docs.npmjs.com/cli/commands/npx",
+        "https://github.com/npm/cli/issues",
+        "https://github.com/npm/rfcs/blob/latest/implemented/0019-remove-update-depth-option.md",
+        "https://nodejs.org/dist/index.json",
+        "https://www.npmjs.com/forgot"
+      ]
+    }
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 114,
+    "right": 114
+  },
+  "parseFailures": []
+}

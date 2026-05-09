@@ -1,0 +1,182 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.3.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "compared": {
+    "left": "node-fetch@3.3.2",
+    "right": "node-fetch@2.6.12"
+  },
+  "packages": {
+    "left": {
+      "name": "node-fetch",
+      "version": "3.3.2",
+      "publishTime": "2023-07-25T11:50:17.626Z",
+      "maintainers": [
+        {
+          "name": "endless",
+          "email": "jimmy@warting.se"
+        },
+        {
+          "name": "bitinn",
+          "email": "bitinn@gmail.com"
+        },
+        {
+          "name": "timothygu",
+          "email": "timothygu99@gmail.com"
+        },
+        {
+          "name": "akepinski",
+          "email": "npm@kepinski.ch"
+        },
+        {
+          "name": "node-fetch-bot",
+          "email": "jimmy+node-fetch@warting.se"
+        }
+      ]
+    },
+    "right": {
+      "name": "node-fetch",
+      "version": "2.6.12",
+      "publishTime": "2023-06-29T19:16:33.256Z",
+      "maintainers": [
+        {
+          "name": "endless",
+          "email": "jimmy@warting.se"
+        },
+        {
+          "name": "bitinn",
+          "email": "bitinn@gmail.com"
+        },
+        {
+          "name": "timothygu",
+          "email": "timothygu99@gmail.com"
+        },
+        {
+          "name": "akepinski",
+          "email": "npm@kepinski.ch"
+        },
+        {
+          "name": "node-fetch-bot",
+          "email": "jimmy+node-fetch@warting.se"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 24,
+    "added": 5,
+    "unchanged": 1
+  },
+  "removed": {
+    "external": [
+      "data-uri-to-buffer",
+      "fetch-blob",
+      "fetch-blob/from.js",
+      "formdata-polyfill/esm.min.js"
+    ],
+    "builtin": [
+      "node:buffer",
+      "node:http",
+      "node:https",
+      "node:net",
+      "node:stream",
+      "node:url",
+      "node:util",
+      "node:zlib"
+    ],
+    "internal": [
+      "./base.js",
+      "./body.js",
+      "./errors/abort-error.js",
+      "./errors/base.js",
+      "./errors/fetch-error.js",
+      "./headers.js",
+      "./request.js",
+      "./response.js",
+      "./utils/get-search.js",
+      "./utils/is-redirect.js",
+      "./utils/is.js",
+      "./utils/referrer.js"
+    ]
+  },
+  "added": {
+    "external": [
+      "whatwg-url"
+    ],
+    "builtin": [
+      "https",
+      "stream",
+      "url",
+      "zlib"
+    ],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [],
+    "builtin": [
+      "http"
+    ],
+    "internal": []
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [
+        "coverage=c8 report --reporter=text-lcov | coveralls",
+        "lint=xo",
+        "test-types=tsd",
+        "test=mocha"
+      ],
+      "added": [
+        "build=cross-env BABEL_ENV=rollup rollup -c",
+        "coverage=cross-env BABEL_ENV=coverage nyc --reporter json --reporter text mocha -R spec test/test.js && codecov -f coverage/coverage-final.json",
+        "prepare=npm run build",
+        "report=cross-env BABEL_ENV=coverage nyc --reporter lcov --reporter text mocha -R spec test/test.js",
+        "test=cross-env BABEL_ENV=test mocha --require babel-register --throw-deprecation test/test.js"
+      ],
+      "unchanged": []
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    },
+    "urlLiterals": {
+      "removed": [
+        "https://github.com/node-fetch/node-fetch/issues/1167"
+      ],
+      "added": [],
+      "unchanged": []
+    }
+  },
+  "additionsOnlyRisk": {
+    "level": "critical",
+    "score": 27,
+    "reasons": [
+      "1 external import(s) added",
+      "5 install script fingerprint(s) added"
+    ],
+    "addedSignals": {
+      "externalImports": 1,
+      "installScripts": 5,
+      "envAccesses": 0,
+      "urlLiterals": 0
+    }
+  },
+  "llmTriage": {
+    "provider": "openai-compatible",
+    "model": "gpt-4o-mini",
+    "generatedAt": "2026-05-08T02:53:54.325Z",
+    "status": "error",
+    "error": "Missing SCG_LLM_API_KEY (set it to enable --llm-triage)"
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 14,
+    "right": 4
+  },
+  "parseFailures": []
+}

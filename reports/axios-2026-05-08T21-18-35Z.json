@@ -1,0 +1,246 @@
+{
+  "schema": {
+    "id": "supply-chain-gap.import-diff-report",
+    "version": "1.4.0"
+  },
+  "filters": {
+    "externalsOnly": false
+  },
+  "analysis": {
+    "mode": "deep",
+    "deepSkipped": true,
+    "deepSkipReason": "no_additive_signals"
+  },
+  "compared": {
+    "left": "axios@1.7.1",
+    "right": "axios@1.7.0"
+  },
+  "packages": {
+    "left": {
+      "name": "axios",
+      "version": "1.7.1",
+      "publishTime": "2024-05-20T13:32:52.757Z",
+      "maintainers": [
+        {
+          "name": "mzabriskie",
+          "email": "mzabriskie@gmail.com"
+        },
+        {
+          "name": "nickuraltsev",
+          "email": "nick.uraltsev@gmail.com"
+        },
+        {
+          "name": "emilyemorehouse",
+          "email": "emilyemorehouse@gmail.com"
+        },
+        {
+          "name": "jasonsaayman",
+          "email": "jasonsaayman@gmail.com"
+        }
+      ]
+    },
+    "right": {
+      "name": "axios",
+      "version": "1.7.0",
+      "publishTime": "2024-05-19T20:25:03.615Z",
+      "maintainers": [
+        {
+          "name": "mzabriskie",
+          "email": "mzabriskie@gmail.com"
+        },
+        {
+          "name": "nickuraltsev",
+          "email": "nick.uraltsev@gmail.com"
+        },
+        {
+          "name": "emilyemorehouse",
+          "email": "emilyemorehouse@gmail.com"
+        },
+        {
+          "name": "jasonsaayman",
+          "email": "jasonsaayman@gmail.com"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "removed": 0,
+    "added": 0,
+    "unchanged": 91
+  },
+  "removed": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "added": {
+    "external": [],
+    "builtin": [],
+    "internal": []
+  },
+  "unchanged": {
+    "external": [
+      "follow-redirects",
+      "form-data",
+      "proxy-from-env"
+    ],
+    "builtin": [
+      "events",
+      "http",
+      "https",
+      "stream",
+      "url",
+      "util",
+      "zlib"
+    ],
+    "internal": [
+      "../../../helpers/AxiosURLSearchParams.js",
+      "../adapters/adapters.js",
+      "../cancel/CanceledError.js",
+      "../cancel/isCancel.js",
+      "../core/AxiosError.js",
+      "../core/AxiosHeaders.js",
+      "../core/buildFullPath.js",
+      "../core/mergeConfig.js",
+      "../core/settle.js",
+      "../defaults/index.js",
+      "../defaults/transitional.js",
+      "../env/data.js",
+      "../helpers/AxiosTransformStream.js",
+      "../helpers/AxiosURLSearchParams.js",
+      "../helpers/buildURL.js",
+      "../helpers/callbackify.js",
+      "../helpers/combineURLs.js",
+      "../helpers/composeSignals.js",
+      "../helpers/formDataToJSON.js",
+      "../helpers/formDataToStream.js",
+      "../helpers/fromDataURI.js",
+      "../helpers/isAbsoluteURL.js",
+      "../helpers/parseHeaders.js",
+      "../helpers/parseProtocol.js",
+      "../helpers/progressEventReducer.js",
+      "../helpers/readBlob.js",
+      "../helpers/resolveConfig.js",
+      "../helpers/toFormData.js",
+      "../helpers/toURLEncodedForm.js",
+      "../helpers/trackStream.js",
+      "../helpers/validator.js",
+      "../helpers/ZlibHeaderTransformStream.js",
+      "../platform/index.js",
+      "../platform/node/classes/FormData.js",
+      "../utils.js",
+      "./../core/settle.js",
+      "./../helpers/buildURL.js",
+      "./../utils.js",
+      "./adapters/adapters.js",
+      "./AxiosError.js",
+      "./AxiosHeaders.js",
+      "./buildFullPath.js",
+      "./buildURL.js",
+      "./cancel/CanceledError.js",
+      "./cancel/CancelToken.js",
+      "./cancel/isCancel.js",
+      "./CanceledError.js",
+      "./classes/Blob.js",
+      "./classes/FormData.js",
+      "./classes/URLSearchParams.js",
+      "./common/utils.js",
+      "./cookies.js",
+      "./core/Axios.js",
+      "./core/AxiosError.js",
+      "./core/AxiosHeaders.js",
+      "./core/mergeConfig.js",
+      "./defaults/index.js",
+      "./dispatchRequest.js",
+      "./env/data.js",
+      "./fetch.js",
+      "./helpers/bind.js",
+      "./helpers/formDataToJSON.js",
+      "./helpers/HttpStatusCode.js",
+      "./helpers/isAxiosError.js",
+      "./helpers/spread.js",
+      "./helpers/toFormData.js",
+      "./http.js",
+      "./InterceptorManager.js",
+      "./isURLSameOrigin.js",
+      "./lib/axios.js",
+      "./mergeConfig.js",
+      "./node/index.js",
+      "./parseProtocol.js",
+      "./readBlob.js",
+      "./speedometer.js",
+      "./throttle.js",
+      "./toFormData.js",
+      "./transformData.js",
+      "./transitional.js",
+      "./utils.js",
+      "./xhr.js"
+    ]
+  },
+  "capabilities": {
+    "installScripts": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "build=gulp clear && cross-env NODE_ENV=production rollup -c -m",
+        "coveralls=cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+        "examples=node ./examples/server.js",
+        "fix=eslint --fix lib/**/*.js",
+        "postpublish=git push && git push --tags",
+        "prepare:hooks=npx husky set .husky/commit-msg \"npx commitlint --edit $1\"",
+        "prepare=husky install && npm run prepare:hooks",
+        "prepublishOnly=npm run test:build:version",
+        "preversion=gulp version",
+        "release:beta:no-npm=release-it --preRelease=beta --no-npm",
+        "release:beta=release-it --preRelease=beta",
+        "release:changelog:fix=node ./bin/injectContributorsList.js && git add CHANGELOG.md",
+        "release:dry=release-it --dry-run --no-npm",
+        "release:info=release-it --release-version",
+        "release:no-npm=release-it --no-npm",
+        "release=release-it",
+        "start=node ./sandbox/server.js",
+        "test:build:version=node ./bin/check-build-version.js",
+        "test:dtslint=dtslint --localTs node_modules/typescript/lib",
+        "test:eslint=node bin/ssl_hotfix.js eslint lib/**/*.js",
+        "test:exports=node bin/ssl_hotfix.js mocha test/module/test.js --timeout 30000 --exit",
+        "test:karma:firefox=node bin/ssl_hotfix.js cross-env LISTEN_ADDR=:: Browsers=Firefox karma start karma.conf.cjs --single-run",
+        "test:karma:server=node bin/ssl_hotfix.js cross-env karma start karma.conf.cjs",
+        "test:karma=node bin/ssl_hotfix.js cross-env LISTEN_ADDR=:: karma start karma.conf.cjs --single-run",
+        "test:mocha=node bin/ssl_hotfix.js mocha test/unit/**/*.js --timeout 30000 --exit",
+        "test=npm run test:eslint && npm run test:mocha && npm run test:karma && npm run test:dtslint && npm run test:exports",
+        "version=npm run build && git add dist && git add package.json"
+      ]
+    },
+    "envAccesses": {
+      "removed": [],
+      "added": [],
+      "unchanged": []
+    },
+    "urlLiterals": {
+      "removed": [],
+      "added": [],
+      "unchanged": [
+        "http://localhost"
+      ]
+    }
+  },
+  "additionsOnlyRisk": {
+    "level": "none",
+    "score": 0,
+    "reasons": [
+      "No added capability or external dependency signals"
+    ],
+    "addedSignals": {
+      "externalImports": 0,
+      "installScripts": 0,
+      "envAccesses": 0,
+      "urlLiterals": 0
+    }
+  },
+  "scanWarnings": [],
+  "scannedFiles": {
+    "left": 69,
+    "right": 69
+  },
+  "parseFailures": []
+}

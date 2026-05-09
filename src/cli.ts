@@ -1,23 +1,80 @@
-import { parsePackageRef } from "./domain/packageRef";
+import { parsePackageRef, parsePackageRange } from "./domain/packageRef";
 import { extractImportsFingerprint } from "./extractor/importExtractor";
+import { extractInstallScriptFingerprints } from "./extractor/extractPackageScripts";
 import { diffImportSets } from "./diff/importDiff";
 import { buildJsonReport } from "./reporters/jsonReporter";
 import { writeJsonReportUnderReports } from "./reporters/writeJsonReport";
-import { printImportDiffConsole } from "./reporters/terminalReporter";
+import {
+  printAdditionsOnlyRiskConsole,
+  printAnalysisModeConsole,
+  printCapabilitiesDiffConsole,
+  printImportDiffConsole,
+  printLlmTriageConsole,
+  printProductVerdictConsole,
+} from "./reporters/terminalReporter";
 import { filterImportsToExternals } from "./reporters/importClassifier";
+import { diffMaintainers } from "./domain/maintainerDiff";
+import { classifySemverBump } from "./domain/semverBump";
+import { rankSupplyChainRisk } from "./reporters/riskRanker";
+import { runLlmTriage } from "./llm/triager";
 import {
   cleanupExtractedDir,
   fetchAndExtractTarball,
 } from "./resolver/tarballFetcher";
-import type { ResolvedPackage } from "./resolver/types";
+import type { PackageRef, ResolvedPackage } from "./resolver/types";
 import { resolvePackage } from "./resolver/npmRegistryClient";
 import { parseCliArgv } from "./cli/parseArgv";
+import { loadDotEnvIfPresent } from "./utils/env";
+import { shouldSkipDeepLlm } from "./analysis/deepSkip";
+import { buildProductVerdict } from "./reporters/verdict";
+import type { ReportAnalysis } from "./reporters/jsonReporter";
+
+function resolveCliPackageRefs(positional: string[]): [PackageRef, PackageRef] {
+  if (positional.length === 0) usage();
+  if (positional.length === 1) {
+    const token = positional[0];
+    if (!token.includes("..")) {
+      console.error(
+        `Expected two package refs (pkg@a pkg@b) or one range (pkg@ver1..ver2).`
+      );
+      usage();
+    }
+    const range = parsePackageRange(token);
+    return [
+      { name: range.name, version: range.baselineVersion },
+      { name: range.name, version: range.compareVersion },
+    ];
+  }
+  if (positional.length === 2) {
+    const left = parsePackageRef(positional[0]);
+    const right = parsePackageRef(positional[1]);
+    if (left.name !== right.name) {
+      console.error(
+        `Package names must match for diff (baseline=${left.name}, compare=${right.name}).`
+      );
+      process.exit(2);
+    }
+    return [left, right];
+  }
+  console.error("Too many positional arguments.");
+  usage();
+}
 
 function usage(): never {
   console.error(
-    `Usage:\n  npx tsx src/cli.ts <pkg@version> <pkg@version> [options]\n`
+    `Usage:\n  npx tsx src/cli.ts <pkg@version> <pkg@version> [options]\n` +
+      `       npx tsx src/cli.ts <pkg@ver1..ver2> [options]\n`
   );
   console.error(`Options:`);
+  console.error(
+    `  --fast                 Deterministic analysis only (default). No LLM calls.`
+  );
+  console.error(
+    `  --deep                 Enable deep analysis (LLM triage when not skipped; may call OpenAI-compatible APIs).`
+  );
+  console.error(
+    `  --llm-triage           Same as --deep (deprecated alias).`
+  );
   console.error(
     `  --format pretty|json   Output format (default: pretty). Loose "json"|"pretty" still accepted.`
   );
@@ -28,7 +85,11 @@ function usage(): never {
     `  -q, --quiet            Pretty mode: omit unchanged section; omit scan summary (see below).`
   );
   console.error(
-    `Example:\n  npx tsx src/cli.ts axios@1.7.1 axios@1.7.0 --format json -e\n`
+    `  --llm-model <name>     Override model for deep LLM triage (or use SCG_LLM_MODEL env).`
+  );
+  console.error(
+    `Examples:\n  npx tsx src/cli.ts axios@1.7.1 axios@1.7.0 --format json -e\n` +
+      `  npx tsx src/cli.ts lodash@4.17.20..4.17.21 --format json\n`
   );
   console.error(
     `JSON is printed to stdout and also saved under reports/<package>-<utc-date>.json`
@@ -48,12 +109,9 @@ function pkgSummary(pkg: ResolvedPackage): {
 
 async function main(): Promise<void> {
   try {
+    await loadDotEnvIfPresent(process.cwd());
     const { flags, positional } = parseCliArgv(process.argv.slice(2));
-    const [a, b] = positional;
-    if (!a || !b) usage();
-
-    const leftRef = parsePackageRef(a);
-    const rightRef = parsePackageRef(b);
+    const [leftRef, rightRef] = resolveCliPackageRefs(positional);
 
     let leftDir: string | undefined;
     let rightDir: string | undefined;
@@ -78,6 +136,75 @@ async function main(): Promise<void> {
       const diff = diffImportSets(leftImports, rightImports);
       const parseFailures = [...leftFp.parseFailures, ...rightFp.parseFailures];
 
+      const leftScripts = await extractInstallScriptFingerprints(leftDir);
+      const rightScripts = await extractInstallScriptFingerprints(rightDir);
+
+      const capabilities = {
+        installScripts: diffImportSets(
+          leftScripts.fingerprints,
+          rightScripts.fingerprints
+        ),
+        envAccesses: diffImportSets(leftFp.envAccesses, rightFp.envAccesses),
+        urlLiterals: diffImportSets(leftFp.urlLiterals, rightFp.urlLiterals),
+      };
+      const maintainerDiff = diffMaintainers(
+        leftResolved.maintainers,
+        rightResolved.maintainers
+      );
+      const semverBump = classifySemverBump(leftRef.version, rightRef.version);
+      const additionsOnlyRisk = rankSupplyChainRisk({
+        imports: diff,
+        installScripts: capabilities.installScripts,
+        envAccesses: capabilities.envAccesses,
+        urlLiterals: capabilities.urlLiterals,
+        semver: semverBump,
+        maintainerDiff,
+      });
+
+      const scanWarnings = [leftScripts.warning, rightScripts.warning].filter(
+        (w): w is string => typeof w === "string" && w.length > 0
+      );
+
+      const deepSkipDecision =
+        flags.mode === "deep"
+          ? shouldSkipDeepLlm({ additionsOnlyRisk })
+          : null;
+
+      const analysisForFinal = (): ReportAnalysis => {
+        if (flags.mode === "fast") return { mode: "fast" };
+        if (deepSkipDecision?.skip && deepSkipDecision.reason) {
+          return {
+            mode: "deep",
+            deepSkipped: true,
+            deepSkipReason: deepSkipDecision.reason,
+          };
+        }
+        return { mode: "deep", deepSkipped: false };
+      };
+
+      const llmTriage =
+        flags.mode === "deep" && !deepSkipDecision?.skip
+          ? await runLlmTriage({
+              report: buildJsonReport({
+                leftLabel: leftFp.label,
+                rightLabel: rightFp.label,
+                leftPkg: pkgSummary(leftResolved),
+                rightPkg: pkgSummary(rightResolved),
+                diff,
+                capabilities,
+                maintainersDiff: maintainerDiff,
+                additionsOnlyRisk,
+                analysis: { mode: "deep", deepSkipped: false },
+                scanWarnings,
+                scannedLeft: leftFp.scannedFiles,
+                scannedRight: rightFp.scannedFiles,
+                parseFailures,
+                externalsOnly: flags.externalsOnly,
+              }),
+              model: flags.llmModel,
+            })
+          : undefined;
+
       if (flags.format === "json") {
         const report = buildJsonReport({
           leftLabel: leftFp.label,
@@ -85,6 +212,12 @@ async function main(): Promise<void> {
           leftPkg: pkgSummary(leftResolved),
           rightPkg: pkgSummary(rightResolved),
           diff,
+          capabilities,
+          maintainersDiff: maintainerDiff,
+          additionsOnlyRisk,
+          analysis: analysisForFinal(),
+          llmTriage,
+          scanWarnings,
           scannedLeft: leftFp.scannedFiles,
           scannedRight: rightFp.scannedFiles,
           parseFailures,
@@ -107,6 +240,27 @@ async function main(): Promise<void> {
         externalsOnly: flags.externalsOnly,
         quiet: flags.quiet,
       });
+
+      printCapabilitiesDiffConsole({
+        installScripts: capabilities.installScripts,
+        envAccesses: capabilities.envAccesses,
+        urlLiterals: capabilities.urlLiterals,
+        quiet: flags.quiet,
+      });
+      printAdditionsOnlyRiskConsole(additionsOnlyRisk);
+      printProductVerdictConsole(buildProductVerdict(additionsOnlyRisk), {
+        quiet: flags.quiet,
+      });
+      printAnalysisModeConsole(analysisForFinal());
+      if (llmTriage) {
+        printLlmTriageConsole(llmTriage);
+      }
+
+      if (scanWarnings.length) {
+        const joined = scanWarnings.join(" | ");
+        if (flags.quiet) console.error(`Capability scan: ${joined}`);
+        else console.log(`Capability scan: ${joined}`);
+      }
 
       if (parseFailures.length) {
         if (flags.quiet) {
@@ -136,7 +290,11 @@ async function main(): Promise<void> {
       );
     }
   } catch (e: unknown) {
-    if (e instanceof Error && e.message.includes("Invalid --format value")) {
+    if (
+      e instanceof Error &&
+      (e.message.includes("Invalid --format value") ||
+        e.message.includes("Cannot use --fast together"))
+    ) {
       console.error(e.message);
       process.exit(2);
     }
